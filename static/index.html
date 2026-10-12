@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>When: what does this cron do?</title>
+  <meta name="description" content="Paste a five-field cron expression. Plain English, then the next run times in a timezone you pick." />
+  <meta name="theme-color" content="#071210" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="canonical" href="https://when.hermz.xyz/" />
+  <link rel="icon" type="image/svg+xml" href="/static/brand/logo.svg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="When: what does this cron do?" />
+  <meta property="og:description" content="Five-field cron in plain English, plus the next run times." />
+  <meta property="og:url" content="https://when.hermz.xyz/" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="page">
+    <header class="nav">
+      <a class="nav-brand" href="/" aria-label="When home">
+        <img src="/static/brand/logo.svg" width="28" height="28" alt="" />
+        <span>When</span>
+      </a>
+      <details class="nav-menu">
+        <summary class="btn ghost sm nav-menu-btn" aria-label="Menu">Menu</summary>
+        <div class="nav-menu-panel">
+          <a href="#how">How</a>
+          <a href="#limits">Limits</a>
+          <a href="#curl">curl</a>
+        </div>
+      </details>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <p class="eyebrow">Five fields. No account.</p>
+        <h1>What does this cron do?</h1>
+        <p class="lede">Paste an expression. You get a plain reading and the next run times. The form works with JavaScript off.</p>
+      </section>
+
+      <form class="cta-card" id="form" action="/" method="get">
+        <label class="field">
+          <span>Expression</span>
+          <input class="mono" id="expr" name="e" type="text" inputmode="text" enterkeyhint="go" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="0 9 * * 1-5" value="<!--EXPR-->" />
+        </label>
+        <label class="field">
+          <span>Timezone</span>
+          <select id="tz" name="tz"><!--TZ_OPTIONS--></select>
+        </label>
+        <label class="field">
+          <span>Other zone</span>
+          <input id="tz-custom" name="tz_custom" type="text" inputmode="text" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="America/Los_Angeles" value="<!--TZ_CUSTOM-->" />
+        </label>
+        <button type="submit" class="btn primary lg" id="go">Show next runs</button>
+        <p class="hint" id="zone-note">Times stay in the zone you pick. This server does not guess your phone zone.</p>
+        <button type="button" class="btn sm" id="use-phone" hidden>Use this phone zone</button>
+        <p class="status<!--STATUS_CLASS-->" id="status" role="status"><!--STATUS--></p>
+      </form>
+
+      <div class="presets" id="presets"><!--PRESETS--></div>
+
+      <!--RESULT-->
+
+      <section id="how" class="block">
+        <h2>How</h2>
+        <div class="steps">
+          <div class="step"><span class="badge">1</span><p>Five fields, in order: minute, hour, day of month, month, weekday.</p></div>
+          <div class="step"><span class="badge">2</span><p>Next times come from croniter, in the zone you picked. Daylight saving is that zone's problem, and we follow it.</p></div>
+          <div class="step"><span class="badge">3</span><p>If day of month and weekday are both set, standard cron fires when either matches. The page says so.</p></div>
+        </div>
+      </section>
+
+      <section id="limits" class="block">
+        <h2>Limits</h2>
+        <ul class="plain">
+          <li>Five fields, or @hourly, @daily, @weekly, @monthly, @yearly. @midnight and @annually too.</li>
+          <li>No seconds field. No @reboot. That one is a boot hook, not a clock time.</li>
+          <li>This is crontab cron. systemd OnCalendar is a different language.</li>
+          <li>8 next runs. 60 explains per IP per hour.</li>
+          <li>Names like MON and JAN are fine. Quartz extras (L, W, #) are not.</li>
+        </ul>
+      </section>
+
+      <section id="curl" class="block">
+        <h2>curl</h2>
+        <code class="curl">curl 'https://when.hermz.xyz/api/explain?e=0%209%20*%20*%201-5&amp;tz=UTC'</code>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>when.hermz.xyz · holy-hermes · MIT</p>
+    </footer>
+  </div>
+  <script src="/static/home.js"></script>
+</body>
+</html>
